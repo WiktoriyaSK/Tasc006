@@ -1,47 +1,69 @@
-﻿using static System.Console;
+﻿//Задача 41: Пользователь вводит с клавиатуры M чисел.
+// Посчитайте, сколько чисел больше 0 ввёл пользователь.
 
-WriteLine($"Размер терминала: {WindowWidth}x{WindowHeight}");
-WriteLine("Нажмите любую клавишу...");
-Console.ReadKey();
-CursorVisible = false; //Console.CursorVisible = false;
+//0, 7, 8, -2, -2 -> 2
 
-//Логика игры
-void Figure(int x, int y)
+//1, -7, 567, 89, 223-> 3
+
+Console.Write("Введите числа через запятую: ");
+int[] numbers = StringToNum(Console.ReadLine());
+PrintArray(numbers);
+int sum = 0;
+for (int i = 0; i < numbers.Length; i++)
 {
-    Clear();
-    for (int i = x - 1; i <= x + 1; i++)
+    if (numbers[i] > 0)
     {
-        for (int j = y - 1; j<= y + 1; j++)
-        {
-            SetCursorPosition(i, j);
-            Write("^");
-        }
+        sum++;
     }
 }
+Console.WriteLine();
+Console.WriteLine($"количество значений больше 0 = {sum}");
 
-//Положение.
-//Нужно обрабатывать значения выхода за границы
-int x = Console.WindowHeight / 2; //по гризонтали. Чем больше - тем правее
-int y = 2; // по вертикали. Чем больше - тем ниже
 
-//Логика отрисовки всего
-new Thread(()=>
+int[] StringToNum(string input)
 {
-while (true)
-{
-    Figure(x, y);
-    Thread.Sleep(500); //Задержка отрисовки. 0.5 секунды
-    if (++y > 15) y = 1;
-    }
- }).Start();
-
-//Логика проверки нажати я кнопок 
-
-while (true)
-{
-    var key = ReadKey(true).Key;
-    if (key == ConsoleKey.LeftArrow)
+    int count = 1;
+    for (int i = 0; i < input.Length; i++)
     {
-        Figure(--x, y);
+        if (input[i] == ',')
+        {
+            count++;
+        }
     }
+
+    int[] numbers = new int [count];
+    int index = 0;
+
+    for (int i = 0; i < input.Length; i++)
+    {
+        string temp = "";
+
+        while (input [i] != ',')
+        {
+        if(i != input.Length - 1)
+        {
+            temp += input [i].ToString();
+            i++;
+        }
+        else
+        {
+            temp += input [i].ToString();
+            break;
+        }
+        }
+        numbers[index] = Convert.ToInt32(temp);
+        index++;
+    }
+    return numbers;
+}
+
+
+void PrintArray(int[] array)
+{
+    Console.Write("[ ");
+    for (int i = 0; i < array.Length; i++)
+    {
+        Console.Write(array[i] + " ");
+    }
+    Console.Write("]");
 }
